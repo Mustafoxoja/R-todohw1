@@ -16,8 +16,11 @@ const Todolist = () => {
       text: value,
       done: false,
     };
-    setTodo((prev) => [newtodo, ...prev]);
+    setTodo((prev) => [newtodo, ...todo]);
     // setTodo("");
+  };
+  const todonew = (id) => {
+    setTodo((prev) => prev.filter((d) => d.id !== id));
   };
   console.log(todo);
 
@@ -56,8 +59,8 @@ const Todolist = () => {
               >
                 <li>
                   {index}. {value.text}
-                </li>{" "}
-                <button onClick={(e) => setText(e.target.value)}>delete</button>
+                </li>
+                <button onClick={() => todonew(value.id)}>delete</button>
               </div>
             );
           })}
