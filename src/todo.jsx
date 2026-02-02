@@ -16,14 +16,26 @@ const Todolist = () => {
       text: value,
       done: false,
     };
-    setTodo((prev) => [newtodo, ...todo]);
-    // setTodo("");
+    setTodo((prev) => [newtodo, ...prev]);
+    setText("");
   };
-  const todonew = (id) => {
-    setTodo((prev) => prev.filter((d) => d.id !== id));
-  };
-  console.log(todo);
 
+  const deleteTodo = (id) => {
+    setTodo((prev) => prev.filter((t) => t.id !== id));
+    console.log(id);
+  };
+  const togTodo = (id) => {
+    setTodo((prev) =>
+      prev.map((data) =>
+        data.id === id ? { ...data, done: !data.done } : data,
+      ),
+    );
+  };
+
+  console.log(todo);
+  const clearall = () => {
+    setTodo([]);
+  };
   return (
     <ToContainer>
       <ToWrapper>
@@ -36,19 +48,10 @@ const Todolist = () => {
             onChange={(e) => setText(e.target.value)}
           />
           <Button type="submit">Add</Button>
+          <Button onClick={clearall}>Clear all</Button>
         </Form>
-        <span>total:{todo.length}</span>
-        {/* <ul>
-          <div style={{ display: "flex" }}>
-            <input type="checkbox" />
-            <li>Running</li>
-            <button>delete</button>
-          </div>{" "}
-          <div style={{ display: "flex" }}>
-            <input type="checkbox" />
-            <li>Running</li> <button>delete</button>
-          </div>
-        </ul> */}
+        <Span>Total:{todo.length}</Span>
+        <Span>Done:{todo.filter((data) => data.done).length}</Span>
 
         <ul>
           {todo.map((value, index) => {
@@ -58,9 +61,17 @@ const Todolist = () => {
                 key={value.id}
               >
                 <li>
-                  {index}. {value.text}
+                  <input type="checkbox" onChange={() => togTodo(value.id)} />
+                  <span
+                    style={{
+                      flex: 1,
+                      textDecoration: value.done ? "Line-through" : "none",
+                    }}
+                  >
+                    {index + 1}. {value.text}
+                  </span>
                 </li>
-                <button onClick={() => todonew(value.id)}>delete</button>
+                <button onClick={() => deleteTodo(value.id)}>delete</button>
               </div>
             );
           })}
@@ -97,5 +108,8 @@ const Input = styled.input`
   width: 300px;
   padding-left: 10px;
 `;
-
+const Span = styled.span`
+  display: flex;
+  margin-left: 130px;
+`;
 export default Todolist;
